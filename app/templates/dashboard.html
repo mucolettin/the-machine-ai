@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>THE MACHINE | Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #070b12;
+            color: #e8edf3;
+        }
+
+        header {
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            border-bottom: 1px solid #1b2635;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        .logo span {
+            color: #00bfff;
+        }
+
+        header a {
+            color: #8996a7;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        header a:hover {
+            color: #00bfff;
+        }
+
+        main {
+            width: 90%;
+            max-width: 1050px;
+            margin: 45px auto;
+        }
+
+        .title {
+            margin-bottom: 25px;
+        }
+
+        .title small {
+            color: #00bfff;
+            letter-spacing: 2px;
+        }
+
+        .title h1 {
+            font-size: 32px;
+            margin: 10px 0;
+        }
+
+        .title p {
+            color: #7f8b9b;
+        }
+
+        .dashboard {
+            background: #0d141f;
+            border: 1px solid #202d40;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .dashboard-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid #202d40;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-header strong {
+            color: #00bfff;
+        }
+
+        .count {
+            color: #8996a7;
+            font-size: 13px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 15px 18px;
+            text-align: left;
+            border-bottom: 1px solid #182333;
+            font-size: 14px;
+        }
+
+        th {
+            color: #00bfff;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: #0a1019;
+        }
+
+        td {
+            color: #c7d0da;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 50px;
+            color: #718095;
+        }
+
+        footer {
+            margin-top: 80px;
+            padding: 22px 7%;
+            border-top: 1px solid #182333;
+            color: #657286;
+            font-size: 12px;
+        }
+
+        @media (max-width: 700px) {
+            main {
+                width: 95%;
+            }
+
+            .dashboard {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 700px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        THE <span>MACHINE</span>
+    </div>
+
+    <a href="/">
+        ← Siteye Dön
+    </a>
+
+</header>
+
+
+<main>
+
+    <div class="title">
+
+        <small>ADMIN DASHBOARD</small>
+
+        <h1>Müşteri Adayları</h1>
+
+        <p>
+            Teklif formundan gelen müşteri taleplerini görüntüleyin.
+        </p>
+
+    </div>
+
+
+    <div class="dashboard">
+
+        <div class="dashboard-header">
+
+            <strong>Lead Listesi</strong>
+
+            <span class="count" id="leadCount">
+                Yükleniyor...
+            </span>
+
+        </div>
+
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>İsim</th>
+                    <th>Telefon</th>
+                    <th>Mesaj</th>
+                    <th>Tarih</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="leadTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</main>
+
+
+<footer>
+    THE MACHINE — AI Hardware & Computing
+</footer>
+
+
+<script>
+
+async function loadLeads() {
+
+    const table =
+        document.getElementById("leadTable");
+
+    const count =
+        document.getElementById("leadCount");
+
+
+    try {
+
+        const response =
+            await fetch("/api/leads");
+
+        const data =
+            await response.json();
+
+
+        if (!data.basarili) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty">
+                        Lead bilgileri alınamadı.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        const leads = data.leads;
+
+        count.textContent =
+            leads.length + " kayıt";
+
+
+        if (leads.length === 0) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty">
+                        Henüz müşteri adayı bulunmuyor.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        table.innerHTML = "";
+
+
+        leads.forEach(function(lead) {
+
+            const row =
+                document.createElement("tr");
+
+
+            row.innerHTML = `
+                <td>${lead.id}</td>
+                <td>${lead.isim}</td>
+                <td>${lead.telefon}</td>
+                <td>${lead.mesaj || "-"}</td>
+                <td>${lead.tarih}</td>
+            `;
+
+
+            table.appendChild(row);
+
+        });
+
+
+    } catch (error) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty">
+                    Sunucuya bağlanırken hata oluştu.
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+loadLeads();
+
+</script>
+
+</body>
+</html>
