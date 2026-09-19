@@ -114,3 +114,11 @@ def leadleri_getir():
             "basarili": False,
             "hata": "Müşteri adayları alınırken bir hata oluştu."
         }), 500
+
+@api_bp.route("/health", methods=["GET"])
+def health():
+    """Uygulamanın çalışıp çalışmadığını kontrol eder."""
+    return jsonify({
+        "status": "ok",
+        "service": "THE MACHINE AI"
+    }), 200
