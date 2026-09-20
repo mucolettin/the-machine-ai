@@ -1,919 +1,1037 @@
 <!DOCTYPE html>
 <html lang="tr">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>THE MACHINE | AI Hardware</title>
-
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #070b12;
-            color: #e9eef5;
-            min-height: 100vh;
-        }
-
-
-        /* NAVBAR */
-
-        nav {
-            height: 68px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            padding: 0 7%;
-
-            border-bottom: 1px solid #182333;
-
-            background: #070b12;
-        }
-
-
-        .logo {
-            font-size: 20px;
-            font-weight: bold;
-            letter-spacing: 3px;
-        }
-
-
-        .logo span {
-            color: #00bfff;
-        }
-
-
-        nav a {
-            color: #8996a7;
-            text-decoration: none;
-            font-size: 14px;
-            margin-left: 25px;
-        }
-
-
-        nav a:hover {
-            color: #00bfff;
-        }
-
-
-        /* MAIN */
-
-        main {
-            width: 90%;
-            max-width: 1050px;
-            margin: auto;
-        }
-
-
-        /* INTRO */
-
-        .intro {
-            text-align: center;
-            padding: 55px 20px 30px;
-        }
-
-
-        .intro small {
-            color: #00bfff;
-            letter-spacing: 2px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-
-        .intro h1 {
-            font-size: 42px;
-            margin: 13px 0;
-        }
-
-
-        .intro h1 span {
-            color: #00bfff;
-        }
-
-
-        .intro p {
-            color: #8996a7;
-            font-size: 15px;
-            max-width: 600px;
-            margin: auto;
-            line-height: 1.6;
-        }
-
-
-        /* CHAT */
-
-        .chat-section {
-            margin-top: 20px;
-        }
-
-
-        .chat-box {
-            background: #0d141f;
-
-            border: 1px solid #223044;
-
-            border-radius: 12px;
-
-            overflow: hidden;
-
-            box-shadow:
-                0 15px 50px rgba(0, 0, 0, 0.25);
-        }
-
-
-        /* CHAT HEADER */
-
-        .chat-header {
-            height: 58px;
-
-            display: flex;
-            align-items: center;
-
-            padding: 0 20px;
-
-            border-bottom: 1px solid #202d40;
-        }
-
-
-        .status {
-            width: 8px;
-            height: 8px;
-
-            border-radius: 50%;
-
-            background: #00d68f;
-
-            margin-right: 10px;
-
-            box-shadow: 0 0 8px #00d68f;
-        }
-
-
-        .chat-header strong {
-            color: #00bfff;
-            font-size: 15px;
-        }
-
-
-        .online {
-            margin-left: auto;
-
-            color: #00d68f;
-
-            font-size: 11px;
-
-            letter-spacing: 1px;
-        }
-
-
-        /* MESSAGES */
-
-        #chat {
-            height: 390px;
-
-            overflow-y: auto;
-
-            padding: 22px;
-
-            background: #080d15;
-        }
-
-
-        .message {
-            max-width: 78%;
-
-            padding: 12px 15px;
-
-            border-radius: 9px;
-
-            margin-bottom: 12px;
-
-            font-size: 14px;
-
-            line-height: 1.6;
-
-            white-space: pre-wrap;
-        }
-
-
-        .bot {
-            background: #141e2b;
-
-            border: 1px solid #202d40;
-
-            color: #d8e0e9;
-        }
-
-
-        .user {
-            margin-left: auto;
-
-            background: #00aee8;
-
-            color: #001018;
-        }
-
-
-        /* INPUT */
-
-        .chat-input {
-            display: flex;
-
-            gap: 10px;
-
-            padding: 15px;
-
-            border-top: 1px solid #202d40;
-
-            background: #0d141f;
-        }
-
-
-        .chat-input input {
-            flex: 1;
-        }
-
-
-        input,
-        textarea {
-            width: 100%;
-
-            padding: 13px 14px;
-
-            border-radius: 7px;
-
-            border: 1px solid #29384d;
-
-            background: #080d15;
-
-            color: white;
-
-            outline: none;
-
-            font-family: Arial, sans-serif;
-        }
-
-
-        input:focus,
-        textarea:focus {
-            border-color: #00bfff;
-        }
-
-
-        button {
-            border: none;
-
-            border-radius: 7px;
-
-            background: #00bfff;
-
-            color: #001018;
-
-            font-weight: bold;
-
-            padding: 0 24px;
-
-            cursor: pointer;
-        }
-
-
-        button:hover {
-            opacity: 0.9;
-        }
-
-
-        /* SMALL INFO */
-
-        .info {
-            display: flex;
-
-            justify-content: center;
-
-            gap: 35px;
-
-            margin: 20px 0 50px;
-
-            color: #718095;
-
-            font-size: 12px;
-        }
-
-
-        .info span {
-            color: #00bfff;
-        }
-
-
-        /* CONTACT */
-
-        .contact {
-            margin-bottom: 55px;
-        }
-
-
-        .contact-box {
-            background: #0d141f;
-
-            border: 1px solid #202d40;
-
-            border-radius: 12px;
-
-            padding: 25px;
-        }
-
-
-        .contact-header {
-            margin-bottom: 20px;
-        }
-
-
-        .contact-header h2 {
-            font-size: 21px;
-
-            margin-bottom: 6px;
-        }
-
-
-        .contact-header p {
-            color: #7f8b9b;
-
-            font-size: 13px;
-        }
-
-
-        .contact-form {
-            display: grid;
-
-            grid-template-columns: 1fr 1fr;
-
-            gap: 10px;
-        }
-
-
-        .contact-form textarea {
-            grid-column: 1 / -1;
-
-            min-height: 90px;
-
-            resize: vertical;
-        }
-
-
-        .contact-form button {
-            grid-column: 1 / -1;
-
-            height: 43px;
-        }
-
-
-        #leadResult {
-            grid-column: 1 / -1;
-
-            font-size: 13px;
-
-            margin-top: 3px;
-        }
-
-
-        .success {
-            color: #00d68f;
-        }
-
-
-        .error {
-            color: #ff6b6b;
-        }
-
-
-        /* FOOTER */
-
-        footer {
-            border-top: 1px solid #182333;
-
-            padding: 22px 7%;
-
-            display: flex;
-
-            justify-content: space-between;
-
-            color: #657286;
-
-            font-size: 12px;
-        }
-
-
-        footer strong {
-            color: #dce3eb;
-        }
-
-
-        /* MOBILE */
-
-        @media (max-width: 650px) {
-
-            nav {
-                padding: 0 5%;
-            }
-
-
-            nav div:last-child {
-                display: none;
-            }
-
-
-            .intro {
-                padding-top: 40px;
-            }
-
-
-            .intro h1 {
-                font-size: 34px;
-            }
-
-
-            #chat {
-                height: 420px;
-            }
-
-
-            .chat-input {
-                flex-direction: column;
-            }
-
-
-            .chat-input button {
-                height: 43px;
-            }
-
-
-            .info {
-                flex-direction: column;
-
-                align-items: center;
-
-                gap: 8px;
-            }
-
-
-            .contact-form {
-                grid-template-columns: 1fr;
-            }
-
-
-            .contact-form textarea,
-            .contact-form button {
-                grid-column: auto;
-            }
-
-
-            footer {
-                flex-direction: column;
-
-                gap: 8px;
-            }
-
-        }
-
-    </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE MACHINE | AI Hardware</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #05070A;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+:root {
+    --bg: #05070A;
+    --dark: #0B0F19;
+    --silver: #C5CCD3;
+    --cyan: #00BFFF;
+}
+
+/* HEADER */
+
+header {
+    width: 100%;
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 6%;
+    border-bottom: 1px solid rgba(197,204,211,0.12);
+    background: #05070A;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.logo-mark {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 800;
+    color: #C5CCD3;
+    background: #080A0E;
+    border: 1px solid rgba(197,204,211,0.15);
+}
+
+.logo-text {
+    color: #C5CCD3;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 45px;
+}
+
+.nav-btn {
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.nav-btn:hover {
+    color: var(--cyan);
+}
+
+.contact-btn {
+    background: var(--cyan);
+    color: #001018;
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-weight: 700;
+}
+
+/* HERO */
+
+.hero {
+    min-height: 680px;
+    display: flex;
+    align-items: center;
+    padding: 80px 7%;
+    background:
+        radial-gradient(
+            circle at 80% 40%,
+            rgba(0,191,255,0.10),
+            transparent 35%
+        ),
+        #05070A;
+}
+
+.hero-content {
+    width: 60%;
+    margin-left: auto;
+}
+
+.eyebrow {
+    color: var(--cyan);
+    font-size: 14px;
+    letter-spacing: 3px;
+    margin-bottom: 25px;
+}
+
+.hero h1 {
+    font-size: clamp(45px, 5vw, 78px);
+    line-height: 1.05;
+    font-weight: 400;
+    margin-bottom: 30px;
+}
+
+.hero p {
+    max-width: 720px;
+    color: #D5D9DE;
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.hero-btn {
+    margin-top: 35px;
+    padding: 16px 32px;
+    border: 1px solid var(--cyan);
+    color: white;
+    background: transparent;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.hero-btn:hover {
+    background: var(--cyan);
+    color: #001018;
+}
+
+/* SECTIONS */
+
+section {
+    padding: 110px 7%;
+}
+
+.section-label {
+    color: var(--cyan);
+    letter-spacing: 3px;
+    font-size: 13px;
+    margin-bottom: 18px;
+}
+
+.section-title {
+    font-size: 48px;
+    font-weight: 400;
+    margin-bottom: 25px;
+}
+
+.section-text {
+    max-width: 850px;
+    color: #C5CCD3;
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+/* SOLUTIONS */
+
+.solutions,
+.advantages {
+    background: #0B0F19;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-top: 60px;
+}
+
+.card {
+    min-height: 260px;
+    padding: 35px;
+    border: 1px solid rgba(197,204,211,0.15);
+    background: rgba(5,7,10,0.75);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    border-color: var(--cyan);
+}
+
+.card-number {
+    color: var(--cyan);
+    font-size: 13px;
+    letter-spacing: 2px;
+}
+
+.card h3 {
+    margin-top: 55px;
+    margin-bottom: 18px;
+    font-size: 24px;
+}
+
+.card p,
+.advantage p {
+    color: #AEB6BF;
+    line-height: 1.6;
+}
+
+/* INNOVATION */
+
+.innovation {
+    background:
+        linear-gradient(
+            rgba(5,7,10,0.88),
+            rgba(5,7,10,0.96)
+        ),
+        #05070A;
+}
+
+.innovation-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.tech-box {
+    border: 1px solid rgba(0,191,255,0.25);
+    min-height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,191,255,0.06),
+            transparent
+        ),
+        #0B0F19;
+}
+
+.tech-symbol {
+    font-size: 120px;
+    font-weight: 900;
+    color: #C5CCD3;
+    text-shadow: 0 0 35px rgba(0,191,255,0.25);
+}
+
+/* ADVANTAGES */
+
+.advantage-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 60px;
+}
+
+.advantage {
+    padding: 30px;
+    border-top: 1px solid var(--cyan);
+}
+
+.advantage h3 {
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+/* CONTACT */
+
+.contact {
+    background: #05070A;
+}
+
+.contact-box {
+    max-width: 850px;
+}
+
+.form {
+    margin-top: 40px;
+    display: grid;
+    gap: 15px;
+}
+
+.form input,
+.form textarea {
+    width: 100%;
+    padding: 17px;
+    background: #0B0F19;
+    border: 1px solid rgba(197,204,211,0.2);
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
+
+.form input:focus,
+.form textarea:focus {
+    border-color: var(--cyan);
+}
+
+.form textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+.form button {
+    width: fit-content;
+    padding: 15px 30px;
+    background: var(--cyan);
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+#leadSonuc {
+    margin-top: 15px;
+    color: var(--cyan);
+}
+
+/* CHAT */
+
+.chat {
+    position: fixed;
+    right: 25px;
+    top: 110px;
+    width: 350px;
+    background: #0B0F19;
+    border: 1px solid rgba(0,191,255,0.35);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+
+.chat-header {
+    padding: 16px 20px;
+    background: #101722;
+    color: white;
+    font-weight: 700;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+.chat-header:active {
+    cursor: grabbing;
+}
+
+.chat-messages {
+    height: 250px;
+    padding: 15px;
+    overflow-y: auto;
+    font-size: 14px;
+}
+
+.message {
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.bot {
+    background: #151D28;
+}
+
+.user {
+    background: rgba(0,191,255,0.15);
+    text-align: right;
+}
+
+.chat-input {
+    display: flex;
+    border-top: 1px solid rgba(197,204,211,0.15);
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 13px;
+    background: transparent;
+    border: none;
+    color: white;
+    outline: none;
+}
+
+.chat-input button {
+    width: 55px;
+    background: var(--cyan);
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+/* FOOTER */
+
+footer {
+    padding: 35px 7%;
+    border-top: 1px solid rgba(197,204,211,0.12);
+    color: #777F88;
+    text-align: center;
+}
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+
+    nav {
+        display: none;
+    }
+
+    .hero-content {
+        width: 100%;
+    }
+
+    .cards,
+    .advantage-list,
+    .innovation-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chat {
+        width: calc(100% - 30px);
+        right: 15px;
+        top: auto;
+        bottom: 15px;
+    }
+
+}
+</style>
 </head>
-
 
 <body>
 
-
-<!-- NAVBAR -->
-
-<nav>
+<header>
 
     <div class="logo">
-        THE <span>MACHINE</span>
+
+        <div class="logo-mark">
+            TM
+        </div>
+
+        <div class="logo-text">
+            THE MACHINE
+        </div>
+
     </div>
 
+    <nav>
 
-    <div>
+        <button
+            type="button"
+            class="nav-btn"
+            data-target="home"
+        >
+            Ana Sayfa
+        </button>
 
-        <a href="#chatbot">
-            AI Asistan
-        </a>
+        <button
+            type="button"
+            class="nav-btn"
+            data-target="solutions"
+        >
+            Çözümlerimiz
+        </button>
 
-        <a href="#contact">
+        <button
+            type="button"
+            class="nav-btn contact-btn"
+            data-target="contact"
+        >
             İletişim
-        </a>
+        </button>
 
-    </div>
+    </nav>
 
-</nav>
-
-
-
-<main>
+</header>
 
 
-    <!-- INTRO -->
+<section
+    class="hero"
+    id="home"
+>
 
-    <section class="intro">
+    <div class="hero-content">
 
-        <small>
-            AI HARDWARE & COMPUTING
-        </small>
-
+        <div class="eyebrow">
+            01 / UZMANLIK ALANLARI
+        </div>
 
         <h1>
-            Yapay zekâ için
-            <span>doğru sistem.</span>
+            Yapay Zekânın Gücünü
+            Donanıma Taşıyoruz
         </h1>
 
-
         <p>
-            THE MACHINE AI asistanına ihtiyaçlarınızı anlatın.
-            Yapay zekâ donanımları, GPU sistemleri,
-            AI sunucuları ve Edge Computing çözümleri
-            hakkında bilgi alın.
+            Yüksek performanslı GPU sistemleri,
+            AI iş istasyonları ve Edge AI
+            çözümleriyle yapay zekâ projeleriniz
+            için güçlü ve ölçeklenebilir donanım
+            altyapıları sunuyoruz.
         </p>
 
-    </section>
+        <button
+            type="button"
+            class="hero-btn"
+            data-target="solutions"
+        >
+            Çözümlerimizi Keşfet
+        </button>
+
+    </div>
+
+</section>
 
 
+<section
+    class="solutions"
+    id="solutions"
+>
 
-    <!-- CHATBOT -->
+    <div class="section-label">
+        02 / ÇÖZÜMLER
+    </div>
 
-    <section class="chat-section" id="chatbot">
+    <h2 class="section-title">
+        Teknolojik Çözümler
+    </h2>
 
-        <div class="chat-box">
+    <p class="section-text">
+        Yapay zekâ ve yüksek performanslı
+        hesaplama ihtiyaçları için güçlü
+        donanım sistemleri geliştiriyoruz.
+    </p>
 
+    <div class="cards">
 
-            <!-- HEADER -->
+        <div class="card">
 
-            <div class="chat-header">
-
-                <span class="status"></span>
-
-                <strong>
-                    THE MACHINE AI
-                </strong>
-
-                <span class="online">
-                    ● ONLINE
-                </span>
-
+            <div class="card-number">
+                01
             </div>
 
+            <h3>
+                AI WORKSTATIONS
+            </h3>
 
-
-            <!-- CHAT -->
-
-            <div id="chat">
-
-                <div class="message bot">
-
-                    Merhaba! 👋
-
-                    Ben THE MACHINE AI satış asistanıyım.
-
-                    Size uygun AI donanımını
-                    belirlemek için projenizi,
-                    bütçenizi veya kullanım amacınızı
-                    anlatabilirsiniz.
-
-                </div>
-
-            </div>
-
-
-
-            <!-- INPUT -->
-
-            <div class="chat-input">
-
-                <input
-                    type="text"
-                    id="messageInput"
-                    placeholder="Örneğin: Yapay zekâ geliştirmek için bilgisayar arıyorum..."
-                >
-
-
-                <button onclick="sendMessage()">
-                    Gönder
-                </button>
-
-            </div>
-
+            <p>
+                Yapay zekâ geliştiricileri ve
+                mühendisler için yüksek performanslı
+                AI iş istasyonları.
+            </p>
 
         </div>
 
-    </section>
+        <div class="card">
 
+            <div class="card-number">
+                02
+            </div>
 
+            <h3>
+                GPU SYSTEMS
+            </h3>
 
-    <!-- INFO -->
+            <p>
+                Model eğitimi, veri analizi ve
+                yüksek performanslı hesaplama
+                için güçlü GPU sistemleri.
+            </p>
 
-    <div class="info">
-
-        <div>
-            <span>✓</span>
-            AI Donanım Danışmanlığı
         </div>
 
+        <div class="card">
 
-        <div>
-            <span>✓</span>
-            GPU Sistemleri
-        </div>
+            <div class="card-number">
+                03
+            </div>
 
+            <h3>
+                EDGE AI
+            </h3>
 
-        <div>
-            <span>✓</span>
-            İhtiyaç Analizi
+            <p>
+                Gerçek zamanlı veri işleme için
+                düşük gecikmeli Edge Computing
+                çözümleri.
+            </p>
+
         </div>
 
     </div>
 
+</section>
 
 
-    <!-- CONTACT -->
+<section class="innovation">
 
-    <section class="contact" id="contact">
+    <div class="innovation-grid">
 
-        <div class="contact-box">
+        <div>
 
-
-            <div class="contact-header">
-
-                <h2>
-                    Teklif Alın
-                </h2>
-
-
-                <p>
-                    Size ulaşabilmemiz için iletişim bilgilerinizi bırakın.
-                </p>
-
+            <div class="section-label">
+                03 / TEKNOLOJİK İNOVASYON
             </div>
 
+            <h2 class="section-title">
+                Geleceğin Altyapısını
+                Bugünden Tasarlıyoruz
+            </h2>
 
-
-            <div class="contact-form">
-
-                <input
-                    type="text"
-                    id="nameInput"
-                    placeholder="Ad Soyad"
-                >
-
-
-                <input
-                    type="text"
-                    id="phoneInput"
-                    placeholder="Telefon"
-                >
-
-
-                <textarea
-                    id="messageLead"
-                    placeholder="İhtiyacınızı kısaca anlatın..."
-                ></textarea>
-
-
-                <button onclick="submitLead()">
-                    Teklif Talebi Gönder
-                </button>
-
-
-                <div id="leadResult"></div>
-
-            </div>
-
+            <p class="section-text">
+                Yapay zekâ, yüksek performanslı
+                hesaplama ve Edge Computing
+                teknolojilerini bir araya getirerek
+                geleceğin dijital altyapılarını
+                geliştiriyoruz.
+            </p>
 
         </div>
 
-    </section>
+        <div class="tech-box">
+
+            <div class="tech-symbol">
+                TM
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
 
-</main>
+<section class="advantages">
+
+    <div class="section-label">
+        04 / TEKNOLOJİK AVANTAJLAR
+    </div>
+
+    <h2 class="section-title">
+        Teknolojik Avantajlar
+    </h2>
+
+    <div class="advantage-list">
+
+        <div class="advantage">
+
+            <h3>
+                GPU POWER
+            </h3>
+
+            <p>
+                AI geliştiricileri için yüksek
+                performanslı GPU sistemleri ve
+                AI iş istasyonları.
+            </p>
+
+        </div>
+
+        <div class="advantage">
+
+            <h3>
+                EDGE COMPUTING
+            </h3>
+
+            <p>
+                Gerçek zamanlı veri işleme için
+                düşük gecikmeli Edge AI çözümleri.
+            </p>
+
+        </div>
+
+        <div class="advantage">
+
+            <h3>
+                SCALABLE INFRA
+            </h3>
+
+            <p>
+                Yapay zekâ projeleri için
+                ölçeklenebilir GPU sunucuları
+                ve güçlü altyapılar.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
 
 
+<section
+    class="contact"
+    id="contact"
+>
 
-<!-- FOOTER -->
+    <div class="contact-box">
+
+        <div class="section-label">
+            05 / İLETİŞİM
+        </div>
+
+        <h2 class="section-title">
+            BİZİMLE İLETİŞİME GEÇİN
+        </h2>
+
+        <p class="section-text">
+            Projeleriniz için doğru donanım
+            çözümünü birlikte oluşturalım.
+            Bize ulaşın, ihtiyaçlarınızı
+            değerlendirelim.
+        </p>
+
+        <div class="form">
+
+            <input
+                id="isim"
+                type="text"
+                placeholder="Adınız Soyadınız"
+            >
+
+            <input
+                id="telefon"
+                type="tel"
+                placeholder="Telefon Numaranız"
+            >
+
+            <textarea
+                id="leadMesaj"
+                placeholder="Projeniz hakkında kısa bilgi"
+            ></textarea>
+
+            <button
+                type="button"
+                id="leadButton"
+            >
+                İletişim Bilgilerimi Gönder
+            </button>
+
+        </div>
+
+        <p id="leadSonuc"></p>
+
+    </div>
+
+</section>
+
 
 <footer>
-
-    <div>
-        <strong>THE MACHINE</strong>
-        — AI Hardware & Computing
-    </div>
-
-
-    <div>
-        © 2026 THE MACHINE
-    </div>
-
+    © 2026 THE MACHINE — AI Hardware & Edge Computing
 </footer>
 
+
+<div
+    class="chat"
+    id="chat"
+>
+
+    <div
+        class="chat-header"
+        id="chatHeader"
+    >
+        THE MACHINE AI
+        <span style="float:right">↕</span>
+    </div>
+
+    <div
+        class="chat-messages"
+        id="chatMessages"
+    >
+
+        <div class="message bot">
+            Merhaba! THE MACHINE hakkında
+            size nasıl yardımcı olabilirim?
+        </div>
+
+    </div>
+
+    <div class="chat-input">
+
+        <input
+            id="chatInput"
+            type="text"
+            placeholder="Bir soru sorun..."
+        >
+
+        <button
+            type="button"
+            id="chatButton"
+        >
+            ➤
+        </button>
+
+    </div>
+
+</div>
 
 
 <script>
 
+/* =========================
+   SAYFA İÇİ GEÇİŞLER
+========================= */
 
-/* AI CHAT */
+function bolumeGit(id) {
 
-async function sendMessage() {
+    const hedef =
+        document.getElementById(id);
 
-    const input =
-        document.getElementById("messageInput");
+    if (hedef) {
 
-    const chat =
-        document.getElementById("chat");
+        hedef.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+}
+
+
+document
+    .querySelectorAll("[data-target]")
+    .forEach(function(button) {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                bolumeGit(
+                    button.getAttribute(
+                        "data-target"
+                    )
+                );
+
+            }
+        );
+
+    });
+
+
+/* =========================
+   SÜRÜKLENEBİLİR CHAT
+========================= */
+
+const chat =
+    document.getElementById("chat");
+
+const chatHeader =
+    document.getElementById("chatHeader");
+
+let dragging = false;
+let startX = 0;
+let startY = 0;
+let startLeft = 0;
+let startTop = 0;
+
+
+chatHeader.addEventListener(
+    "pointerdown",
+    function(event) {
+
+        dragging = true;
+
+        const rect =
+            chat.getBoundingClientRect();
+
+        startX = event.clientX;
+        startY = event.clientY;
+
+        startLeft = rect.left;
+        startTop = rect.top;
+
+        chatHeader.setPointerCapture(
+            event.pointerId
+        );
+
+    }
+);
+
+
+chatHeader.addEventListener(
+    "pointermove",
+    function(event) {
+
+        if (!dragging) {
+            return;
+        }
+
+        chat.style.left =
+            (
+                startLeft +
+                event.clientX -
+                startX
+            ) + "px";
+
+        chat.style.top =
+            (
+                startTop +
+                event.clientY -
+                startY
+            ) + "px";
+
+        chat.style.right = "auto";
+        chat.style.bottom = "auto";
+
+    }
+);
+
+
+chatHeader.addEventListener(
+    "pointerup",
+    function() {
+
+        dragging = false;
+
+    }
+);
+
+
+chatHeader.addEventListener(
+    "pointercancel",
+    function() {
+
+        dragging = false;
+
+    }
+);
+
+
+/* =========================
+   AI CHAT
+========================= */
+
+let gecmis = [];
+
+
+const chatInput =
+    document.getElementById(
+        "chatInput"
+    );
+
+const chatButton =
+    document.getElementById(
+        "chatButton"
+    );
+
+const chatMessages =
+    document.getElementById(
+        "chatMessages"
+    );
+
+
+function mesajEkle(
+    mesaj,
+    tur
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+    div.className =
+        "message " + tur;
+
+    div.textContent =
+        mesaj;
+
+    chatMessages.appendChild(
+        div
+    );
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+
+    return div;
+
+}
+
+
+async function mesajGonder() {
 
     const mesaj =
-        input.value.trim();
-
+        chatInput.value.trim();
 
     if (!mesaj) {
         return;
     }
 
 
-    /* Kullanıcı mesajı */
-
-    chat.innerHTML += `
-        <div class="message user">
-            ${mesaj}
-        </div>
-    `;
-
-
-    input.value = "";
-
-
-    /* AI cevap bekleniyor */
-
-    const loading = document.createElement("div");
-
-    loading.className = "message bot";
-
-    loading.textContent = "Yanıt hazırlanıyor...";
-
-    chat.appendChild(loading);
-
-
-    chat.scrollTop = chat.scrollHeight;
-
-
-    try {
-
-        const response = await fetch(
-            "/api/sohbet",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-                    mesaj: mesaj
-                })
-            }
-        );
-
-
-        const data =
-            await response.json();
-
-
-        loading.remove();
-
-
-        if (data.basarili) {
-
-            const botMessage =
-                document.createElement("div");
-
-            botMessage.className =
-                "message bot";
-
-            botMessage.textContent =
-                data.cevap;
-
-            chat.appendChild(botMessage);
-
-        } else {
-
-            const errorMessage =
-                document.createElement("div");
-
-            errorMessage.className =
-                "message bot";
-
-            errorMessage.textContent =
-                data.hata;
-
-            chat.appendChild(errorMessage);
-        }
-
-
-    } catch (error) {
-
-        loading.remove();
-
-
-        const errorMessage =
-            document.createElement("div");
-
-        errorMessage.className =
-            "message bot";
-
-        errorMessage.textContent =
-            "Sunucuya bağlanırken bir hata oluştu.";
-
-        chat.appendChild(errorMessage);
-    }
-
-
-    chat.scrollTop = chat.scrollHeight;
-}
-
-
-
-/* ENTER İLE MESAJ GÖNDER */
-
-document
-    .getElementById("messageInput")
-    .addEventListener(
-        "keydown",
-        function(event) {
-
-            if (event.key === "Enter") {
-
-                sendMessage();
-
-            }
-
-        }
+    mesajEkle(
+        mesaj,
+        "user"
     );
 
+    chatInput.value = "";
 
 
-/* LEAD */
-
-async function submitLead() {
-
-    const isim =
-        document
-            .getElementById("nameInput")
-            .value
-            .trim();
+    gecmis.push({
+        role: "user",
+        content: mesaj
+    });
 
 
-    const telefon =
-        document
-            .getElementById("phoneInput")
-            .value
-            .trim();
-
-
-    const mesaj =
-        document
-            .getElementById("messageLead")
-            .value
-            .trim();
-
-
-    const result =
-        document.getElementById("leadResult");
-
-
-    if (!isim || !telefon) {
-
-        result.className = "error";
-
-        result.textContent =
-            "Ad Soyad ve telefon alanları zorunludur.";
-
-        return;
-    }
+    const loading =
+        mesajEkle(
+            "Yanıt hazırlanıyor...",
+            "bot"
+        );
 
 
     try {
 
         const response =
             await fetch(
-                "/api/leads",
+                "/api/sohbet",
                 {
                     method: "POST",
 
@@ -922,11 +1040,11 @@ async function submitLead() {
                             "application/json"
                     },
 
-                    body: JSON.stringify({
-                        isim: isim,
-                        telefon: telefon,
-                        mesaj: mesaj
-                    })
+                    body:
+                        JSON.stringify({
+                            mesaj: mesaj,
+                            gecmis: gecmis
+                        })
                 }
             );
 
@@ -935,53 +1053,188 @@ async function submitLead() {
             await response.json();
 
 
+        loading.remove();
+
+
         if (data.basarili) {
 
-            result.className =
-                "success";
+            const cevap =
+                data.cevap ||
+                "Cevap alınamadı.";
 
-            result.textContent =
-                data.mesaj;
-
-
-            document
-                .getElementById("nameInput")
-                .value = "";
+            mesajEkle(
+                cevap,
+                "bot"
+            );
 
 
-            document
-                .getElementById("phoneInput")
-                .value = "";
-
-
-            document
-                .getElementById("messageLead")
-                .value = "";
+            gecmis.push({
+                role: "assistant",
+                content: cevap
+            });
 
         } else {
 
-            result.className =
-                "error";
+            mesajEkle(
+                data.hata ||
+                "Bir hata oluştu.",
+                "bot"
+            );
 
-            result.textContent =
-                data.hata;
         }
-
 
     } catch (error) {
 
-        result.className =
-            "error";
+        loading.remove();
 
-        result.textContent =
-            "Sunucuya bağlanırken bir hata oluştu.";
+        mesajEkle(
+            "Sunucuya bağlanırken bir hata oluştu.",
+            "bot"
+        );
+
     }
 
 }
 
+
+chatButton.addEventListener(
+    "click",
+    mesajGonder
+);
+
+
+chatInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            mesajGonder();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   LEAD FORMU
+========================= */
+
+const leadButton =
+    document.getElementById(
+        "leadButton"
+    );
+
+
+leadButton.addEventListener(
+    "click",
+    async function() {
+
+        const isim =
+            document
+                .getElementById("isim")
+                .value
+                .trim();
+
+        const telefon =
+            document
+                .getElementById("telefon")
+                .value
+                .trim();
+
+        const mesaj =
+            document
+                .getElementById("leadMesaj")
+                .value
+                .trim();
+
+        const sonuc =
+            document.getElementById(
+                "leadSonuc"
+            );
+
+
+        if (!isim || !telefon) {
+
+            sonuc.textContent =
+                "İsim ve telefon alanları zorunludur.";
+
+            return;
+
+        }
+
+
+        sonuc.textContent =
+            "Bilgileriniz gönderiliyor...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/leads",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+                                isim: isim,
+                                telefon: telefon,
+                                mesaj: mesaj
+                            })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (data.basarili) {
+
+                sonuc.textContent =
+                    data.mesaj ||
+                    "Bilgileriniz başarıyla gönderildi.";
+
+                document
+                    .getElementById("isim")
+                    .value = "";
+
+                document
+                    .getElementById("telefon")
+                    .value = "";
+
+                document
+                    .getElementById("leadMesaj")
+                    .value = "";
+
+            } else {
+
+                sonuc.textContent =
+                    data.hata ||
+                    "Bilgiler gönderilemedi.";
+
+            }
+
+        } catch (error) {
+
+            sonuc.textContent =
+                "Sunucuya bağlanırken bir hata oluştu.";
+
+        }
+
+    }
+);
+
 </script>
 
-
 </body>
-
 </html>
