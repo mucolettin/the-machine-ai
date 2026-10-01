@@ -1,0 +1,6 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env
+the_machine.db

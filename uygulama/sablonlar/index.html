@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE MACHINE AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0b0f19;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            padding: 20px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .logo p {
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        .chat-box {
+            background: #111827;
+            border: 1px solid #263043;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .messages {
+            height: 450px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            border-radius: 12px;
+            max-width: 80%;
+            line-height: 1.5;
+        }
+
+        .bot {
+            background: #1f2937;
+            margin-right: auto;
+        }
+
+        .user {
+            background: #2563eb;
+            margin-left: auto;
+        }
+
+        .input-area {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #263043;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 14px;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            background: #0f172a;
+            color: white;
+            outline: none;
+        }
+
+        button {
+            border: none;
+            padding: 0 22px;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">
+        <h1>THE MACHINE AI</h1>
+        <p>Yapay zekâ destekli satış asistanı</p>
+    </div>
+
+    <div class="chat-box">
+
+        <div class="messages" id="messages">
+            <div class="message bot">
+                Merhaba! Ben THE MACHINE AI satış asistanıyım.
+                Size nasıl yardımcı olabilirim?
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input
+                type="text"
+                id="messageInput"
+                placeholder="Mesajınızı yazın..."
+                autocomplete="off"
+            >
+
+            <button onclick="mesajGonder()">
+                Gönder
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+let sohbetGecmisi = [];
+
+async function mesajGonder() {
+
+    const input = document.getElementById("messageInput");
+    const mesaj = input.value.trim();
+
+    if (!mesaj) {
+        return;
+    }
+
+    mesajEkle(mesaj, "user");
+
+    input.value = "";
+
+    try {
+
+        const response = await fetch("/api/sohbet", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                mesaj: mesaj,
+                gecmis: sohbetGecmisi
+            })
+
+        });
+
+        const data = await response.json();
+
+        if (data.basari) {
+
+            mesajEkle(data.cevap, "bot");
+
+            sohbetGecmisi.push({
+                role: "user",
+                content: mesaj
+            });
+
+            sohbetGecmisi.push({
+                role: "assistant",
+                content: data.cevap
+            });
+
+        } else {
+
+            mesajEkle(
+                "Bir hata oluştu: " + data.hata,
+                "bot"
+            );
+
+        }
+
+    } catch (error) {
+
+        mesajEkle(
+            "Sunucuya bağlanırken bir hata oluştu.",
+            "bot"
+        );
+
+        console.error(error);
+    }
+}
+
+
+function mesajEkle(mesaj, tip) {
+
+    const messages = document.getElementById("messages");
+
+    const div = document.createElement("div");
+
+    div.className = "message " + tip;
+
+    div.textContent = mesaj;
+
+    messages.appendChild(div);
+
+    messages.scrollTop = messages.scrollHeight;
+}
+
+
+document
+    .getElementById("messageInput")
+    .addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+            mesajGonder();
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
