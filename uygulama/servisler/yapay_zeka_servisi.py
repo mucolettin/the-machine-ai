@@ -1,159 +1,262 @@
+import os
 import requests
-
-from flask import current_app
 
 
 class YapayZekaServisHatasi(Exception):
-    """THE MACHINE yapay zekâ servisinde oluşan hatalar."""
+    """Yapay zeka servisi ile ilgili hatalar."""
     pass
 
 
 class YapayZekaServisi:
 
-    GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
+    def __init__(self):
 
-    GROQ_MODEL = "openai/gpt-oss-20b"
+        self.api_anahtari = os.getenv(
+            "GROQ_API_KEY"
+        )
+
+        self.api_url = (
+            "https://api.groq.com/openai/v1/chat/completions"
+        )
+
+        self.model = "openai/gpt-oss-20b"
+
 
     def yanit_uret(
         self,
-        kullanici_mesaji,
-        sohbet_gecmisi=None
+        mesaj,
+        gecmis=None
     ):
 
-        saglayici = current_app.config.get(
-            "AI_PROVIDER",
-            "groq"
-        ).lower()
+        # ------------------------------------
+        # API ANAHTARI KONTROLÜ
+        # ------------------------------------
 
-        if saglayici == "groq":
+        if not self.api_anahtari:
 
-            return self._groq_cagir(
-                kullanici_mesaji,
-                sohbet_gecmisi
+            raise YapayZekaServisHatasi(
+                "GROQ_API_KEY bulunamadı."
             )
 
-        raise YapayZekaServisHatasi(
-            f"Desteklenmeyen AI sağlayıcısı: {saglayici}"
-        )
 
-    def _groq_cagir(
-        self,
-        kullanici_mesaji,
-        sohbet_gecmisi=None
-    ):
+        # ------------------------------------
+        # SYSTEM PROMPT
+        # ------------------------------------
 
-        api_key = current_app.config.get(
-            "GROQ_API_KEY",
-            ""
-        )
+        sistem_mesaji = """
+Sen THE MACHINE şirketinin Akıllı Satış ve Çözüm Asistanısın.
 
-        # API anahtarı yoksa demo modu
-        if not api_key:
-            return self._demo_yaniti_ver()
+Görevin, ziyaretçilerin THE MACHINE hakkında sordukları sorulara
+doğru, anlaşılır ve profesyonel cevaplar vermektir.
 
-        # ayarlar.py içindeki THE MACHINE bilgileri
-        system_talimati = current_app.config.get(
-            "BUSINESS_CONTEXT",
-            """
-            Sen THE MACHINE şirketinin
-            yapay zekâ destekli satış ve
-            çözüm asistanısın.
-            """
-        )
+THE MACHINE; yapay zeka ve yüksek performanslı hesaplama
+ihtiyaçlarına yönelik çözüm, analiz ve danışmanlık sunar.
+
+THE MACHINE fiziksel ürün satan bir e-ticaret şirketi değildir.
+
+Kullanıcılara özellikle şu konularda yardımcı olabilirsin:
+
+- AI Workstation çözümleri
+- AI Server çözümleri
+- Yüksek performanslı GPU sistemleri
+- Edge Computing çözümleri
+- Yapay zeka altyapıları
+- İş yükü ve ihtiyaç analizi
+- Sistem gereksinimlerinin belirlenmesi
+- Teknik çözüm önerileri
+- TCO (Toplam Sahip Olma Maliyeti)
+- ROI (Yatırım Getirisi)
+- Teknik ve finansal uygunluk analizi
+- Kullanıcının ihtiyacından gereksiz yere daha güçlü
+  veya daha pahalı sistem önermemek
+
+Kullanıcının sorusuna göre cevap ver.
+
+Her kullanıcıya aynı hazır mesajı verme.
+
+Kullanıcı sadece selam verirse kısa ve doğal karşılık ver.
+
+Bilmediğin bir bilgiyi uydurma.
+
+Cevaplarını varsayılan olarak Türkçe ver.
+Kullanıcı başka dilde sorarsa uygun şekilde cevap verebilirsin.
+
+Cevapların gereksiz yere çok uzun olmasın.
+Profesyonel ama doğal bir dil kullan.
+"""
+
 
         mesajlar = [
             {
                 "role": "system",
-                "content": system_talimati
+                "content": sistem_mesaji
             }
         ]
 
-        # Önceki konuşmaları ekle
-        if sohbet_gecmisi:
 
-            for mesaj in sohbet_gecmisi[-10:]:
+        # ------------------------------------
+        # KONUŞMA GEÇMİŞİ
+        # ------------------------------------
 
-                if not isinstance(mesaj, dict):
+        if isinstance(gecmis, list):
+
+            for kayit in gecmis:
+
+                if not isinstance(
+                    kayit,
+                    dict
+                ):
                     continue
 
-                rol = mesaj.get("role")
-                icerik = mesaj.get("content")
+
+                rol = kayit.get(
+                    "role"
+                )
+
+                icerik = kayit.get(
+                    "content"
+                )
+
 
                 if (
-                    rol in ["user", "assistant"]
-                    and isinstance(icerik, str)
-                    and icerik.strip()
+                    rol in [
+                        "user",
+                        "assistant"
+                    ]
+                    and icerik
                 ):
 
                     mesajlar.append({
                         "role": rol,
-                        "content": icerik.strip()
+                        "content": str(
+                            icerik
+                        )
                     })
 
-        # Kullanıcının yeni mesajı
+
+        # ------------------------------------
+        # YENİ KULLANICI MESAJI
+        # ------------------------------------
+
         mesajlar.append({
             "role": "user",
-            "content": kullanici_mesaji
+            "content": mesaj
         })
 
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json"
-        }
 
-        veri = {
-            "model": self.GROQ_MODEL,
-            "messages": mesajlar,
-            "temperature": 0.4,
-            "max_tokens": 500
-        }
+        # ------------------------------------
+        # GROQ API
+        # ------------------------------------
 
         try:
 
             cevap = requests.post(
-                self.GROQ_URL,
-                headers=headers,
-                json=veri,
-                timeout=60
+
+                self.api_url,
+
+                headers={
+                    "Authorization":
+                        f"Bearer {self.api_anahtari}",
+
+                    "Content-Type":
+                        "application/json"
+                },
+
+                json={
+                    "model":
+                        self.model,
+
+                    "messages":
+                        mesajlar,
+
+                    "temperature":
+                        0.5,
+
+                    "max_tokens":
+                        700
+                },
+
+                timeout=30
             )
 
+
+            # HTTP hatasını yakala
             cevap.raise_for_status()
 
-            sonuc = cevap.json()
 
-            return (
-                sonuc["choices"][0]
-                ["message"]
-                ["content"]
+            veri = cevap.json()
+
+
+            # --------------------------------
+            # AI CEVABINI AL
+            # --------------------------------
+
+            ai_cevabi = (
+                veri
+                .get("choices", [])[0]
+                .get("message", {})
+                .get("content", "")
             )
 
-        except requests.RequestException as hata:
+
+            if not ai_cevabi:
+
+                raise YapayZekaServisHatasi(
+                    "Yapay zeka boş cevap döndürdü."
+                )
+
+
+            return ai_cevabi.strip()
+
+
+        except requests.exceptions.Timeout:
 
             raise YapayZekaServisHatasi(
-                f"Groq bağlantı hatası: {hata}"
+                "Yapay zeka servisi zaman aşımına uğradı."
             )
+
+
+        except requests.exceptions.RequestException as hata:
+
+            print(
+                "GROQ API HATASI:",
+                hata
+            )
+
+            if hasattr(
+                hata,
+                "response"
+            ) and hata.response is not None:
+
+                print(
+                    "GROQ CEVABI:",
+                    hata.response.text
+                )
+
+
+            raise YapayZekaServisHatasi(
+                "Yapay zeka servisine bağlanılamadı."
+            )
+
 
         except (
             KeyError,
             IndexError,
             TypeError
-        ):
+        ) as hata:
 
-            raise YapayZekaServisHatasi(
-                "THE MACHINE AI servisinden "
-                "beklenen yanıt alınamadı."
+            print(
+                "GROQ CEVAP AYRIŞTIRMA HATASI:",
+                hata
             )
 
-    def _demo_yaniti_ver(self):
+            raise YapayZekaServisHatasi(
+                "Yapay zeka cevabı okunamadı."
+            )
 
-        return (
-            "Merhaba! Ben THE MACHINE Akıllı Satış "
-            "ve Çözüm Asistanıyım. Şu anda demo "
-            "modunda çalışıyorum. AI Workstation, "
-            "AI Server, yüksek performanslı GPU "
-            "sistemleri ve Edge Computing çözümleri "
-            "hakkında yardımcı olabilirim."
-        )
 
+# =========================================================
+# SERVİS NESNESİ
+# =========================================================
 
 yapay_zeka_servisi = YapayZekaServisi()
