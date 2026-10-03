@@ -1,69 +1,61 @@
-import os
-
 from flask import Flask
 from flask_cors import CORS
-from dotenv import load_dotenv
+
+from ayarlar import Ayarlar
+from uygulama.veritabani import veritabani_olustur
 
 
 def uygulama_olustur():
 
-    # .env dosyasını yükle
-    load_dotenv()
+    uygulama = Flask(
+        __name__,
+        template_folder="sablonlar"
+    )
 
+    # Ayarları yükle
+    uygulama.config.from_object(Ayarlar)
 
-    # Flask uygulamasını oluştur
-    uygulama = Flask(__name__)
-
-
-    # Türkçe karakter desteği
+    # Türkçe karakterler düzgün görünsün
     uygulama.json.ensure_ascii = False
 
-
-    # Temel ayarlar
-    uygulama.config["SECRET_KEY"] = os.getenv(
-        "SECRET_KEY",
-        "the-machine-secret"
-    )
-
-
-    uygulama.config["DATABASE_URL"] = os.getenv(
-        "DATABASE_URL",
-        "the_machine.db"
-    )
-
-
-    # Wix'in API'ye erişebilmesi için CORS
+    # Wix'in Render API'ye erişebilmesi için CORS
     CORS(
         uygulama,
         resources={
             r"/api/*": {
                 "origins": "*"
             }
-        }
+        },
+        methods=[
+            "GET",
+            "POST",
+            "OPTIONS"
+        ],
+        allow_headers=[
+            "Content-Type",
+            "Authorization"
+        ]
     )
 
+    # Veritabanını oluştur / hazırla
+    with uygulama.app_context():
+        veritabani_olustur()
 
-    # Veritabanını hazırla
-    from uygulama.veritabani import (
-        veritabani_baslat
-    )
-
-    veritabani_baslat(
-        uygulama
-    )
-
-
-    # Sadece API route'larını yükle
+    # Route'ları yükle
     from uygulama.rotalar import (
-        api_arayuzu
+        api_arayuzu,
+        sayfa_arayuzu
     )
 
+    # Normal sayfalar
+    uygulama.register_blueprint(
+        sayfa_arayuzu
+    )
 
-    # /api ile başlayan adresler
+    # API adresleri
     uygulama.register_blueprint(
         api_arayuzu,
         url_prefix="/api"
     )
-
 
     return uygulama
