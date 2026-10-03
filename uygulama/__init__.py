@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 
 from ayarlar import Ayarlar
@@ -18,7 +18,7 @@ def uygulama_olustur():
     # Türkçe karakterler düzgün görünsün
     uygulama.json.ensure_ascii = False
 
-    # Wix'in Render API'ye erişebilmesi için CORS
+    # Wix'in Render API'ye bağlanabilmesi için CORS
     CORS(
         uygulama,
         resources={
@@ -37,25 +37,31 @@ def uygulama_olustur():
         ]
     )
 
-    # Veritabanını oluştur / hazırla
+    # Veritabanını hazırla
     with uygulama.app_context():
         veritabani_olustur()
 
-    # Route'ları yükle
-    from uygulama.rotalar import (
-        api_arayuzu,
-        sayfa_arayuzu
-    )
+    # API rotalarını yükle
+    from uygulama.rotalar import api_arayuzu
 
-    # Normal sayfalar
-    uygulama.register_blueprint(
-        sayfa_arayuzu
-    )
-
-    # API adresleri
     uygulama.register_blueprint(
         api_arayuzu,
         url_prefix="/api"
     )
+
+    # Render ana adresi 404 vermesin
+    @uygulama.route("/")
+    def ana_sayfa():
+        return jsonify({
+            "basari": True,
+            "mesaj": "THE MACHINE AI backend çalışıyor."
+        })
+
+    # Sağlık kontrolü
+    @uygulama.route("/health")
+    def health():
+        return jsonify({
+            "durum": "ok"
+        })
 
     return uygulama
